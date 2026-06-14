@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>e-Altura 579: Bantay Kalusugan</title>\
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="images/logo.png" type="image/png">
+    <script src="scripts.js"></script>
+  </head>
+  <body>
+    <!-- Confirmation Modal (Path C Submit) -->
+    <div id="confirm-modal-overlay">
+      <div id="confirm-modal">
+        <h4>✔ Confirm Submission</h4>
+        <p>Are you sure you want to submit?</p>
+        <label
+          style="
+            display: block;
+            text-align: left;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: #333;
+          "
+        >
+          Feedback (Optional)
+        </label>
+        <textarea
+          id="confirm-feedback"
+          rows="3"
+          maxlength="400"
+          placeholder="Leave a feedback or additional comment..."
+          oninput="document.getElementById('confirm-feedback-count').textContent = this.value.length + ' / 400';"
+        ></textarea>
+        <small id="confirm-feedback-count">0 / 400</small>
+        <div class="confirm-modal-btns">
+          <button
+            class="confirm-btn-no"
+            onclick="document.getElementById('confirm-modal-overlay').classList.remove('active');"
+          >
+            Cancel
+          </button>
+          <button
+            class="confirm-btn-yes"
+            onclick="
+            var target = document.getElementById('confirm-modal-overlay').dataset.target;
+            document.getElementById(target).submit();
+          "
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Age Validation Modal -->
+    <div id="age-modal-overlay">
+      <div id="age-modal">
+        <h4>⚠ Invalid Age</h4>
+        <p>Input Age</p>
+        <button
+          onclick="document.getElementById('age-modal-overlay').classList.remove('active'); document.getElementById('age').value = ''; document.getElementById('age').focus();"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+
+    <div class="system-container">
+      <header class="title-box">
+        <div class="hero-banner">
+          <img
+            src="images/Public_Market2.png"
+            alt="Altura-579 Market"
+            class="hero-img"
+          />
+          <div class="hero-overlay">
+            <h2>e-Altura 579: Bantay Kalusugan</h2>
+          </div>
+        </div>
+      </header>
+
+      <!-- LANDING PAGE -->
+      <div id="landing-page">
+        <div class="directory-box">
+          <h4>Emergency &amp; Concerns Directory</h4>
+          <div class="dir-item">
+            <span>Brgy 579 Hall:</span> <strong>(02) 8820-9132</strong>
+          </div>
+          <div class="dir-item">
+            <span>Sta. Mesa Police Station:</span>
+            <strong>(02) 8715-4124 or 0998-598-7908</strong>
+          </div>
+          <div class="dir-item">
+            <span>Manila Health Department:</span>
+            <strong>(02) 8527-4960 (Main Line)</strong>
+          </div>
+          <div class="dir-item">
+            <span>Market Administration Office:</span>
+            <strong>(02) 8310-5773</strong>
+          </div>
+          <div class="dir-item">
+            <span>National Emergency:</span> <strong>911</strong>
+          </div>
+        </div>
+
+        <div class="consent-box">
+          <strong>Data Privacy Notice / Abiso sa Pagkapribado ng Datos:</strong>
+          <p id="consent_text">
+            I consent to the collection of my personal and health information
+            for community monitoring and emergency response. My data will remain
+            confidential and used only for safety purposes.
+            <br /><small
+              ><i
+                >Pumapayag ako sa pagkolekta ng aking personal na impormasyon at
+                datos sa kalusugan para sa monitoring at emergency.
+                Pananatilihing kumpidensyal ang aking datos para sa kaligtasan
+                ng lahat.</i
+              ></small
+            >
+          </p>
+          <label class="check-label">
+            <input type="checkbox" id="consent-check" onchange="toggleMenu()" />
+            I accept. / Pumapayag ako.
+          </label>
+        </div>
+
+        <div id="path-selection" style="display: none">
+          <div class="report-header">
+            <h2><br />File a report.</h2>
+            <h3>Choose your survey.</h3>
+          </div>
+          <button type="button" class="path-btn" onclick="showPath('path-a')">
+            Full Health &amp; Consumer Survey | Buong Pagsusuri sa Kalusugan at
+            Pamilihan
+          </button>
+          <button type="button" class="path-btn" onclick="showPath('path-b')">
+            Quick Symptom Report | Mabilis na Pag-ulat ng Sintomas
+          </button>
+          <button type="button" class="path-btn" onclick="showPath('path-c')">
+            Report Issue in the Market | Pag-ulat ng Isyu sa Pamilihan
+          </button>
+        </div>
+      </div>
+
+      <!-- PATH A: FULL SURVEY -->
+      <form
+        id="path-a"
+        action="submit_full_survey.php"
+        method="POST"
+        class="hidden"
+        style="display: none"
+        enctype="multipart/form-data"
+      >
+        <button type="button" class="back-btn" onclick="goBack()">
+          ← Back
+        </button>
+        <h3>Full Survey Details</h3>
+
+        <fieldset>
+          <legend>Personal Information (Impormasyon sa Tao)</legend>
+          <div class="input-group">
+            <label>Last Name (Apelyido)*</label>
+            <input
+              type="text"
+              name="last_name"
+              required
+              placeholder="e.g. Dela Cruz"
+              pattern="[A-Za-z\s]+"
+              title="Letters and spaces only. No numbers or symbols allowed."
+              oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+            />
+          </div>
+          <div class="input-group">
+            <label>First Name (Pangalan)*</label>
+            <input
+              type="text"
+              name="first_name"
+              required
+              placeholder="e.g. Juan"
+              pattern="[A-Za-z\s]+"
+              title="Letters and spaces only. No numbers or symbols allowed."
+              oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+            />
+          </div>
+          <div class="input-group">
+            <label>Middle Initial (Gitnang Inisyal)</label>
+            <input
+              type="text"
+              name="middle_initial"
+              placeholder="e.g. S"
+              maxlength="2"
+              pattern="[A-Za-z]{1,2}"
+              title="1-2 letters only"
+              oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')"
+            />
+          </div>
+          <div class="input-group">
+            <label>Age (Edad)</label>
+            <input
+              type="number"
+              name="age"
+              id="age"
+              min="1"
+              max="99"
+              placeholder="e.g. 25"
+              onchange="if(this.value > 99 || this.value < 1){ document.getElementById('age-modal-overlay').classList.add('active'); }"
+            />
+          </div>
+          <div class="input-group">
+            <label>Gender (Kasarian)</label>
+            <label class="radio-label"
+              ><input type="radio" name="gender" value="Male" /> Male</label
+            >
+            <label class="radio-label"
+              ><input type="radio" name="gender" value="Female" /> Female</label
+            >
+            <label class="radio-label"
+              ><input type="radio" name="gender" value="PreferNotToSay" />
+              Prefer not to say</label
+            >
+          </div>
+          <div class="input-group">
+            <label>Address (Tirahan)</label>
+            <select name="address">
+              <option value="">Select Address...</option>
+              <option>Buenas Aires Street</option>
+              <option>Altura</option>
+              <option>Vigan</option>
+              <option>Domingo Santiago</option>
+              <option>Road 10</option>
+              <option>R. Magsaysay Blvd</option>
+              <option>Other (Outside Brgy 579)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Contact Number</label>
+            <input
+              type="text"
+              name="contact_no"
+              placeholder="09XXXXXXXXX"
+              maxlength="11"
+              pattern="\d{11}"
+              title="Please enter an 11-digit number"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)"
+            />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Health Status (Katayuan ng Kalusugan)</legend>
+          <label>Vaccination Status (Bakunang Natanggap):</label>
+          <div style="margin-top: 10px">
+            <label class="check-label"
+              ><input
+                type="checkbox"
+                name="vax[]"
+                value="MMR"
+                onchange="toggleBox(this, 'v-mmr')"
+              />
+              Measles/MMR</label
+            >
+            <div id="v-mmr" class="conditional-box" style="display: none">
+              <input
+                type="text"
+                name="vax_year_mmr"
+                placeholder="Year Received"
+              />
+              <input
+                type="text"
+                name="vax_eff_mmr"
+                placeholder="Estimated Effectivity"
+              />
+            </div>
+
+            <label class="check-label"
+              ><input
+                type="checkbox"
+                name="vax[]"
+                value="Typhoid"
+                onchange="toggleBox(this, 'v-typ')"
+              />
+              Typhoid</label
+            >
+            <div id="v-typ" class="conditional-box" style="display: none">
+              <input
+                type="text"
+                name="vax_year_typ"
+                placeholder="Year Received"
+              />
+              <input
+                type="text"
+                name="vax_eff_typ"
+                placeholder="Estimated Effectivity"
+              />
+            </div>
+
+            <label class="check-label"
+              ><input
+                type="checkbox"
+                name="vax[]"
+                value="HepA"
+                onchange="toggleBox(this, 'v-hep')"
+              />
+              Hepatitis A</label
+            >
+            <div id="v-hep" class="conditional-box" style="display: none">
+              <input
+                type="text"
+                name="vax_year_hep"
+                placeholder="Year Received"
+              />
+              <input
+                type="text"
+                name="vax_eff_hep"
+                placeholder="Estimated Effectivity"
+              />
+            </div>
+
+            <label class="check-label"
+              ><input
+                type="checkbox"
+                name="vax[]"
+                value="Flu"
+                onchange="toggleBox(this, 'v-flu')"
+              />
+              Flu</label
+            >
+            <div id="v-flu" class="conditional-box" style="display: none">
+              <input
+                type="text"
+                name="vax_year_flu"
+                placeholder="Year Received"
+              />
+              <input
+                type="text"
+                name="vax_eff_flu"
+                placeholder="Estimated Effectivity"
+              />
+            </div>
+
+            <label class="check-label"
+              ><input
+                type="checkbox"
+                name="vax[]"
+                value="Rotavirus"
+                onchange="toggleBox(this, 'v-rot')"
+              />
+              Rotavirus</label
+            >
+            <div id="v-rot" class="conditional-box" style="display: none">
+              <input
+                type="text"
+                name="vax_year_rot"
+                placeholder="Year Received"
+              />
+              <input
+                type="text"
+                name="vax_eff_rot"
+                placeholder="Estimated Effectivity"
+              />
+            </div>
+
+            <label class="check-label"
+              ><input
+                type="checkbox"
+                name="vax[]"
+                value="Polio"
+                onchange="toggleBox(this, 'v-pol')"
+              />
+              Polio</label
+            >
+            <div id="v-pol" class="conditional-box" style="display: none">
+              <input
+                type="text"
+                name="vax_year_pol"
+                placeholder="Year Received"
+              />
+              <input
+                type="text"
+                name="vax_eff_pol"
+                placeholder="Estimated Effectivity"
+              />
+            </div>
+            <label class="check-label"
+              >Others:
+              <input type="text" name="vax_other" placeholder="Specify..."
+            /></label>
+          </div>
+
+          <label>Symptoms (Sintomas)*:</label>
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="symptoms[]"
+              value="Loss of Appetite"
+            />
+            Loss of Appetite</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="symptoms[]"
+              value="Fever"
+              onchange="toggleBox(this, 'fa-fever')"
+            />
+            Fever</label
+          >
+          <div id="fa-fever" class="conditional-box" style="display: none">
+            Body Temperature:
+            <input
+              type="number"
+              name="body_temp"
+              step="0.1"
+              min="35"
+              max="45"
+              placeholder="e.g. 38.5"
+            />
+            °C
+          </div>
+          <label class="check-label"
+            ><input type="checkbox" name="symptoms[]" value="Cough" />
+            Cough</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="symptoms[]"
+              value="Fatigue"
+            />Fatigue</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="symptoms[]"
+              value="Nausea"
+            />Nausea</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="symptoms[]"
+              value="Diarrhea"
+            />Diarrhea</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="symptoms[]"
+              value="Abdominal Pain"
+              onchange="toggleBox(this, 'fa-pain')"
+            />Abdominal Pain</label
+          >
+          <div id="fa-pain" class="conditional-box" style="display: none">
+            Pain Scale (1-10):
+            <input
+              type="range"
+              name="pain_scale"
+              min="1"
+              max="10"
+              oninput="this.nextElementSibling.value = this.value"
+            /><output>0</output>
+          </div>
+          <label class="check-label"
+            >Others:<input
+              type="text"
+              name="symptoms_other"
+              placeholder="Specify..."
+          /></label>
+
+          <div class="input-group">
+            <label>Symptom Onset (Kailan Nagsimula)</label>
+            <input type="date" name="onset_date" />
+          </div>
+
+          <div class="input-group">
+            <label>Medical Documents (Optional)</label>
+            <input type="file" name="med_docs" />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Consumer Tracking (Pagsubaybay)</legend>
+          <div class="input-group">
+            <label>Last Market Visit (Huling Pagpunta)</label>
+            <input type="datetime-local" name="last_visit" />
+          </div>
+          <div class="input-group">
+            <label>Floor Map Reference (Mapa ng Palengke)</label>
+            <div class="map-placeholder">
+              <img
+                src="Market_FloorMap.jpg"
+                alt="Altura-579 Market Floor Map"
+                class="map-img"
+              />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Stall Location &amp; Vendor (Puwesto at Tindahan)*</label>
+            <select
+              id="stall-select"
+              name="stall_id"
+              required
+              onchange="checkManualEntry(this.value)"
+            >
+              <option value="" disabled selected hidden>
+                Select Location | Row-Col | Vendor (Category)...
+              </option>
+              <optgroup label="WET MARKET">
+                <option value="wet_01">
+                  Main Gate | R1-C1 | Vendor 101 (Seafood)
+                </option>
+                <option value="wet_02">
+                  Near Ice Station | R2-C3 | Rodney's Meatshop (Meat/Karne)
+                </option>
+                <option value="wet_03">
+                  Central Sinks | R3-C2 | Aling Nena's (Poultry)
+                </option>
+              </optgroup>
+              <optgroup label="DRY GOODS">
+                <option value="dry_01">
+                  Near Stairs | Aisle A | K's Fashion (Clothing)
+                </option>
+                <option value="dry_02">
+                  Beside Mercury Drug Store | Aisle B | Sari-Sari Hub
+                  (Groceries)
+                </option>
+                <option value="dry_03">
+                  Near Fitting Rooms | Aisle C | Household Center (Hardware)
+                </option>
+              </optgroup>
+              <optgroup label="FOOD COURT">
+                <option value="food_01">
+                  Tray Return Area | Stall 1 | Brew &amp; Bean (Cafe)
+                </option>
+                <option value="food_02">
+                  Near Restroom | Stall 5 | Icing &amp; Sprinkles (Bakery)
+                </option>
+                <option value="food_03">
+                  Near the Main Entrance | Stall 8 | Lutong Bahay (Cooked Food)
+                </option>
+              </optgroup>
+              <optgroup label="UNREGISTERED / ROAMING">
+                <option value="roaming">
+                  Roaming Seller (Naglalako / Mobile Vendor)
+                </option>
+                <option value="manual">I don't remember / Other</option>
+              </optgroup>
+            </select>
+          </div>
+          <div id="manual-stall-box" style="display: none; margin-top: 10px">
+            <label>Describe the Location/Vendor (Ilarawan ang Puwesto):</label>
+            <textarea
+              id="manual-desc"
+              name="manual_stall_desc"
+              rows="2"
+              placeholder="e.g. Malapit sa parking, naka-blue na t-shirt, naglalako ng prutas..."
+            ></textarea>
+          </div>
+
+          <div class="input-group">
+            <label>Product Type (Uri ng Produkto)</label>
+            <select
+              name="product_type"
+              id="product_type_select"
+              onchange="toggleBoxManual(this.value === 'Others', 'fa-prod-other'); handleRequiredOther(this.value)"
+              required
+            >
+              <option value="" disabled selected hidden>
+                Select Product...
+              </option>
+              <option>Meat (Karne)</option>
+              <option>Fish (Isda)</option>
+              <option>Vegetable (Gulay)</option>
+              <option>Cooked (Luto)</option>
+              <option value="Others">Others</option>
+            </select>
+            <input
+              type="text"
+              name="product_other"
+              id="fa-prod-other"
+              style="display: none; margin-top: 5px"
+              placeholder="Specify product..."
+            />
+          </div>
+          <div class="input-group">
+            <label>Time of Consumption</label>
+            <input type="time" name="time_consumption" />
+          </div>
+          <div class="input-group">
+            <label>Photo (Optional)</label>
+            <input type="file" name="fa_photo" />
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Behavior (Paraan ng Pagkain)</legend>
+          <div class="inline-group">
+            <label class="row-label">Storage:</label>
+            <div class="options-row">
+              <label class="radio-label"
+                ><input
+                  type="radio"
+                  name="storage"
+                  value="Fridge"
+                />Fridge</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="storage" value="RoomTemp" /> Room
+                Temp</label
+              >
+              <label class="radio-label"
+                ><input
+                  type="radio"
+                  name="storage"
+                  value="Cooler"
+                />Cooler</label
+              >
+            </div>
+          </div>
+          <div class="inline-group">
+            <label class="row-label">Site:</label>
+            <div class="options-row">
+              <label class="radio-label"
+                ><input type="radio" name="eat_site" value="Home" /> Home</label
+              >
+              <label class="radio-label"
+                ><input
+                  type="radio"
+                  name="eat_site"
+                  value="Stall"
+                />Stall</label
+              >
+              <label class="radio-label"
+                ><input
+                  type="radio"
+                  name="eat_site"
+                  value="Street"
+                />Street</label
+              >
+            </div>
+          </div>
+        </fieldset>
+
+        <button
+          type="button"
+          class="submit-btn"
+          onclick="
+          var form = document.getElementById('path-a');
+          if(form.checkValidity()){
+            document.getElementById('confirm-feedback').value = '';
+            document.getElementById('confirm-feedback-count').textContent = '0 / 400';
+            document.getElementById('confirm-modal-overlay').dataset.target = 'path-a';
+            document.getElementById('confirm-modal-overlay').classList.add('active');
+          } else { form.reportValidity(); }
+        "
+        >
+          Submit Full Survey
+        </button>
+      </form>
+
+      <!-- PATH B: QUICK REPORT -->
+      <form
+        id="path-b"
+        action="submit_quick_report.php"
+        method="POST"
+        class="hidden"
+        style="display: none"
+        enctype="multipart/form-data"
+      >
+        <button type="button" class="back-btn" onclick="goBack()">
+          ← Back
+        </button>
+        <h3>Quick Symptom Report</h3>
+
+        <div class="input-group">
+          <label>Last Name (Apelyido)*</label>
+          <input
+            type="text"
+            name="qb_last_name"
+            required
+            placeholder="e.g. Dela Cruz"
+            pattern="[A-Za-z\s]+"
+            title="Letters and spaces only. No numbers or symbols allowed."
+            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+          />
+        </div>
+        <div class="input-group">
+          <label>First Name (Pangalan)*</label>
+          <input
+            type="text"
+            name="qb_first_name"
+            required
+            placeholder="e.g. Juan"
+            pattern="[A-Za-z\s]+"
+            title="Letters and spaces only. No numbers or symbols allowed."
+            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+          />
+        </div>
+        <div class="input-group">
+          <label>Middle Initial (Gitnang Inisyal)</label>
+          <input
+            type="text"
+            name="qb_middle_initial"
+            placeholder="e.g. S"
+            maxlength="2"
+            pattern="[A-Za-z]{1,2}"
+            title="1-2 letters only"
+            oninput="this.value = this.value.replace(/[^A-Za-z]/g, '')"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Address (Tirahan)</label>
+          <select name="qb_address">
+            <option value="">Select Address...</option>
+            <option>Buenas Aires Street</option>
+            <option>Altura</option>
+            <option>Vigan</option>
+            <option>Domingo Santiago</option>
+            <option>Road 10</option>
+            <option>R. Magsaysay Blvd</option>
+            <option>Other (Outside Brgy 579)</option>
+          </select>
+        </div>
+
+        <label>Symptoms Checklist (Mga Sintomas)*:</label>
+        <div>
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Loss of Appetite"
+            />Loss of Appetite</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Fever"
+              onchange="toggleBox(this, 'fb-fever')"
+            />Fever</label
+          >
+          <div id="fb-fever" style="display: none">
+            Body Temperature:
+            <input
+              type="number"
+              name="qb_temp"
+              step="0.1"
+              min="35"
+              max="45"
+              placeholder="e.g. 38.5"
+            />
+            °C
+          </div>
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Cough"
+            />Cough</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Fatigue"
+            />Fatigue</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Nausea"
+            />Nausea</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Diarrhea"
+            />Diarrhea</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qb_symptoms[]"
+              value="Abdominal Pain"
+              onchange="toggleBox(this, 'fb-pain')"
+            />Abdominal Pain</label
+          >
+          <div id="fb-pain" style="display: none">
+            Pain Scale (1-10):
+            <input
+              type="range"
+              name="qb_pain_scale"
+              min="1"
+              max="10"
+              oninput="this.nextElementSibling.value = this.value"
+            /><output>0</output>
+          </div>
+          <label class="check-label"
+            >Others:
+            <input
+              type="text"
+              name="qb_symptoms_other"
+              placeholder="Specify..."
+            />
+          </label>
+        </div>
+
+        <div class="input-group" style="margin-top: 15px">
+          <label>Product Type (Uri ng Produkto)</label>
+          <select
+            name="qb_product_type"
+            onchange="toggleBoxManual(this.value === 'Others', 'qb-prod-other')"
+          >
+            <option value="" disabled selected hidden>Select Product...</option>
+            <option>Meat (Karne)</option>
+            <option>Fish (Isda)</option>
+            <option>Vegetable (Gulay)</option>
+            <option>Cooked (Luto)</option>
+            <option value="Others">Others</option>
+          </select>
+          <input
+            type="text"
+            name="qb_product_other"
+            id="qb-prod-other"
+            style="display: none; margin-top: 5px"
+            placeholder="Specify product..."
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Bought from Altura? (Bumili sa Altura?)</label>
+          <label class="radio-label"
+            ><input
+              type="radio"
+              name="qb_bought_altura"
+              value="Yes"
+            />Yes</label
+          >
+          <label class="radio-label"
+            ><input type="radio" name="qb_bought_altura" value="No" /> No</label
+          >
+        </div>
+
+        <div class="input-group">
+          <label>Floor Map Reference (Mapa ng Palengke)</label>
+          <div class="map-placeholder">
+            <img
+              src="Market_FloorMap.jpg"
+              alt="Altura-579 Market Floor Map"
+              class="map-img"
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Stall Location &amp; Vendor (Puwesto at Tindahan)*</label>
+          <select
+            id="qb-stall-select"
+            name="qb_stall_id"
+            required
+            onchange="checkManualEntryPathB(this.value)"
+          >
+            <option value="" disabled selected hidden>
+              Select Location | Row-Col | Vendor (Category)...
+            </option>
+            <optgroup label="WET MARKET">
+              <option value="wet_01">
+                Main Gate | R1-C1 | Vendor 101 (Seafood)
+              </option>
+              <option value="wet_02">
+                Near Ice Station | R2-C3 | Rodney's Meatshop (Meat/Karne)
+              </option>
+              <option value="wet_03">
+                Central Sinks | R3-C2 | Aling Nena's (Poultry)
+              </option>
+            </optgroup>
+            <optgroup label="DRY GOODS">
+              <option value="dry_01">
+                Near Stairs | Aisle A | K's Fashion (Clothing)
+              </option>
+              <option value="dry_02">
+                Beside Mercury Drug Store | Aisle B | Sari-Sari Hub (Groceries)
+              </option>
+              <option value="dry_03">
+                Near Fitting Rooms | Aisle C | Household Center (Hardware)
+              </option>
+            </optgroup>
+            <optgroup label="FOOD COURT">
+              <option value="food_01">
+                Tray Return Area | Stall 1 | Brew &amp; Bean (Cafe)
+              </option>
+              <option value="food_02">
+                Near Restroom | Stall 5 | Icing &amp; Sprinkles (Bakery)
+              </option>
+              <option value="food_03">
+                Near the Main Entrance | Stall 8 | Lutong Bahay (Cooked Food)
+              </option>
+            </optgroup>
+            <optgroup label="UNREGISTERED / ROAMING">
+              <option value="roaming">
+                Roaming Seller (Naglalako / Mobile Vendor)
+              </option>
+              <option value="manual">I don't remember / Other</option>
+            </optgroup>
+          </select>
+        </div>
+        <div id="qb-manual-stall-box" style="display: none; margin-top: 10px">
+          <label>Describe the Location/Vendor (Ilarawan ang Puwesto):</label>
+          <textarea
+            name="qb_manual_desc"
+            rows="2"
+            placeholder="e.g. Malapit sa parking, naka-blue na t-shirt, naglalako ng prutas..."
+          ></textarea>
+        </div>
+        <div class="input-group">
+          <label>Evidence Photo (Optional)</label>
+          <input type="file" name="qb_photo" />
+        </div>
+        <button
+          type="button"
+          class="submit-btn"
+          onclick="
+          var form = document.getElementById('path-b');
+          if(form.checkValidity()){
+            document.getElementById('confirm-feedback').value = '';
+            document.getElementById('confirm-feedback-count').textContent = '0 / 400';
+            document.getElementById('confirm-modal-overlay').dataset.target = 'path-b';
+            document.getElementById('confirm-modal-overlay').classList.add('active');
+          } else { form.reportValidity(); }
+        "
+        >
+          Submit Quick Report
+        </button>
+      </form>
+
+      <!-- PATH C: REPORT ISSUE -->
+      <form
+        id="path-c"
+        action="submit_issue_report.php"
+        method="POST"
+        class="hidden"
+        style="display: none"
+        enctype="multipart/form-data"
+      >
+        <button type="button" class="back-btn" onclick="goBack()">
+          ← Back
+        </button>
+        <h3>Report Issue</h3>
+
+        <div class="input-group">
+          <label>Full Name (Optional)</label>
+          <input
+            type="text"
+            name="qc_full_name"
+            placeholder="Leave blank for anonymous"
+            pattern="[A-Za-z\s]+"
+            title="Letters and spaces only. No numbers or symbols allowed."
+            oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Floor Map Reference (Mapa ng Palengke)</label>
+          <div class="map-placeholder">
+            <img
+              src="Market_FloorMap.jpg"
+              alt="Altura-579 Market Floor Map"
+              class="map-img"
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Stall Location &amp; Vendor (Puwesto at Tindahan)*</label>
+          <select
+            id="qc-stall-select"
+            name="qc_stall_id"
+            required
+            onchange="checkManualEntryPathC(this.value)"
+          >
+            <option value="" disabled selected hidden>
+              Select Location | Row-Col | Vendor (Category)...
+            </option>
+            <optgroup label="WET MARKET">
+              <option value="wet_01">
+                Main Gate | R1-C1 | Vendor 101 (Seafood)
+              </option>
+              <option value="wet_02">
+                Near Ice Station | R2-C3 | Rodney's Meatshop (Meat/Karne)
+              </option>
+              <option value="wet_03">
+                Central Sinks | R3-C2 | Aling Nena's (Poultry)
+              </option>
+            </optgroup>
+            <optgroup label="DRY GOODS">
+              <option value="dry_01">
+                Near Stairs | Aisle A | K's Fashion (Clothing)
+              </option>
+              <option value="dry_02">
+                Beside Mercury Drug Store | Aisle B | Sari-Sari Hub (Groceries)
+              </option>
+              <option value="dry_03">
+                Near Fitting Rooms | Aisle C | Household Center (Hardware)
+              </option>
+            </optgroup>
+            <optgroup label="FOOD COURT">
+              <option value="food_01">
+                Tray Return Area | Stall 1 | Brew &amp; Bean (Cafe)
+              </option>
+              <option value="food_02">
+                Near Restroom | Stall 5 | Icing &amp; Sprinkles (Bakery)
+              </option>
+              <option value="food_03">
+                Near the Main Entrance | Stall 8 | Lutong Bahay (Cooked Food)
+              </option>
+            </optgroup>
+            <optgroup label="UNREGISTERED / ROAMING">
+              <option value="roaming">
+                Roaming Seller (Naglalako / Mobile Vendor)
+              </option>
+              <option value="manual">I don't remember / Other</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div id="qc-manual-stall-box" style="display: none; margin-top: 10px">
+          <label>Describe the Location/Vendor (Ilarawan ang Puwesto):</label>
+          <textarea
+            name="qc_manual_desc"
+            rows="2"
+            placeholder="e.g. Malapit sa parking, naka-blue na t-shirt, naglalako ng prutas..."
+          ></textarea>
+        </div>
+
+        <div class="input-group">
+          <label>Date and Time of Observance (Petsa at Oras ng Mapansin)</label>
+          <input type="datetime-local" name="qc_obs_time" required />
+        </div>
+
+        <label>Issue Selection (Uri ng Isyu):</label>
+        <div class="issue-container">
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Spoiled Food"
+            />Spoiled or Rotten Food (Panis o Bulok na Pagkain)</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Bad Product Smell"
+            />Bad Smell of Selling Products (Mabahong Amoy ng Paninda)</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Discolored Goods"
+            />Discoloration of Goods Sold (Iba ang Kulay ng mga Produkto)</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Undercooked Food"
+            />Undercooked Prepared Food (Hilaw na Lutong Pagkain)</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Foreign Object"
+            />Foreign Object in Product (May Nakahalong Bagay sa Loob ng
+            Produkto)</label
+          >
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Pest"
+              onchange="toggleBox(this, 'fc-pest')"
+            />Pest Presence in Stall Area (May Peste sa Paligid ng
+            Puwesto)</label
+          >
+          <div
+            id="fc-pest"
+            style="
+              display: none;
+              margin-left: 20px;
+              padding: 5px;
+              border-left: 2px solid #ccc;
+            "
+          >
+            <small>Specify Pest (Anong Peste?):</small><br />
+            <select name="qc_pest_type">
+              <option value="" disabled selected hidden>Choose Pest...</option>
+              <option>Flies (Langaw)</option>
+              <option>Rats (Daga)</option>
+              <option>Cockroaches (Ipis)</option>
+              <option>Others</option>
+            </select>
+          </div>
+
+          <label class="check-label"
+            ><input
+              type="checkbox"
+              name="qc_issues[]"
+              value="Waste Management"
+            />Unmanaged Waste or Trash (Maruming Basurahan o Nagkalat na
+            Basura)</label
+          >
+          <label class="check-label"
+            ><input type="checkbox" name="qc_issues[]" value="Drainage Issue" />
+            Bad Smell from Drainage (Mabahong Amoy mula sa Kanal)</label
+          >
+          <label class="check-label" style="margin-top: 10px"
+            >Others:<input
+              type="text"
+              name="qc_issues_other"
+              placeholder="Specify other issue..."
+              style="width: 70%"
+          /></label>
+        </div>
+
+        <div class="input-group" style="margin-top: 15px">
+          <label>Photo Attachment (Optional)</label>
+          <input type="file" name="qc_photo" />
+        </div>
+        <div class="input-group">
+          <label>Description (Deskripsyon)*</label>
+          <textarea
+            name="qc_description"
+            id="qc_description"
+            rows="3"
+            required
+            maxlength="400"
+            placeholder="Provide more details..."
+            oninput="document.getElementById('qc-desc-count').textContent = this.value.length + ' / 400';"
+          ></textarea>
+          <small
+            id="qc-desc-count"
+            style="
+              display: block;
+              text-align: right;
+              color: #888;
+              margin-top: 3px;
+            "
+            >0 / 400</small
+          >
+        </div>
+
+        <button
+          type="button"
+          class="submit-btn"
+          onclick="
+          var form = document.getElementById('path-c');
+          if(form.checkValidity()){
+            document.getElementById('confirm-feedback').value = '';
+            document.getElementById('confirm-feedback-count').textContent = '0 / 400';
+            document.getElementById('confirm-modal-overlay').dataset.target = 'path-c';
+            document.getElementById('confirm-modal-overlay').classList.add('active');
+          } else { form.reportValidity(); }
+        "
+        >
+          Submit Complaint
+        </button>
+      </form>
+    </div>
+
+    <a href="AdminDashboard.php" target="_blank" rel="noopener">Admin Dashboard</a>
+
+  </body>
+</html>
